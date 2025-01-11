@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Portfolio</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'portfolio/css/styles.css' %}">
+    <style>
+        .crypto-image {
+            width: 50px;
+            height: auto;
+        }
+
+        body {
+            background-color: #222;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .container {
+            background-color: #222;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(20, 87, 233, 0.5);
+        }
+
+        .crypto-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+
+        }
+
+        .crypto-card {
+            width: calc(25% - 20px);
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease-in-out;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(20, 87, 233, 0.5);
+            text-align: center;
+            background-color: #333;
+        }
+
+        .crypto-card:hover {
+            transform: translateY(-5px);
+        }
+
+        p {
+            margin: 5px 0;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 10px 20px;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ul>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'portfolio' %}">My Portfolio</a></li>
+            <li><a href="{% url 'holdings_list' %}">Holdings</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'register' %}">Register</a></li>
+            {% endif %}
+        </ul>
+
+    </nav>
+    <h1>My Portfolio</h1>
+    {% if portfolio %}
+    <div class="container">
+        <div class="crypto-container">
+            {% for item in portfolio %}
+            <div class="crypto-card">
+                <img src="{{item.image}}" alt="{{ item.cryptocurrency }} Image" class="crypto-image">
+                <!-- Cryptocurrency Image -->
+                <h2>{{ item.cryptocurrency }}</h2> <!-- Cryptocurrency Name -->
+                <p><strong>Symbol:</strong> {{ item.symbol }}</p>
+                <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                <p><strong>Purchase Price:</strong> ${{ item.purchase_price }}</p>
+                <p><strong>Purchase Date:</strong> {{ item.purchase_date }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <p>No holdings found.</p>
+    {% endif %}
+</body>
+
+</html>
